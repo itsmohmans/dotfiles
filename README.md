@@ -88,8 +88,10 @@ The config uses **Monaspace Argon**. Install it from the
 or from the AUR:
 
 ```bash
-sudo pacman -S ttf-monaspace
+sudo pacman -S ttf-monaspace-variable
 ```
+
+Or use your own font and add it to `alacritty.toml`.
 
 ### Theme
 
