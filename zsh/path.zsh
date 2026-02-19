@@ -5,6 +5,7 @@ export PATH="$HOME/go/bin:$PATH"
 
 # Personal scripts
 export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Doom Emacs
 export PATH="$HOME/.config/emacs/bin:$PATH"
