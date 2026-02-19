@@ -1,0 +1,44 @@
+
+[font]
+normal = { family = "Monaspace Argon" }
+size = 16.0
+
+[cursor]
+style = { shape = "underline", blinking = "on" }
+unfocused_hollow = true
+thickness = 0.15
+
+[mouse]
+bindings = [
+  { mouse = "Right", mods = "Shift", action = "Paste" },
+  # this one does not work for some reason?
+  # { mouse = "Middle", mods = "Shift", action = "CopySelection" },
+]
+
+[keyboard]
+bindings = [
+  { key = "N", mods = "Control|Shift", action = "CreateNewWindow" },
+]
+
+
+[window]
+startup_mode = "Windowed"
+title = "alacritty"
+dynamic_title = true 
+decorations_theme_variant = "None"
+decorations = "Full"
+opacity = 0.9
+blur = true
+padding = { x = 10, y = 2 }
+
+[general]
+import = [
+  "./themes/thelovelace.toml"
+]
+
+[terminal]
+
+[terminal.shell]
+# program = "/usr/bin/tmux"
+# args = ["a"] # this is to open the latest tmux session
+program = "/home/mo/scripts/tmux_session.sh"
