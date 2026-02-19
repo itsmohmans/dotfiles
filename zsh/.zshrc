@@ -25,7 +25,7 @@ _source_if_exists "$ZSH_MODULES/aliases.zsh"
 _source_if_exists "$ZSH_MODULES/functions.zsh"
 
 # Tool-specific initializations
-for toolfile in "$ZSH_MODULES"/tools/*.zsh; do
-    _source_if_exists "$toolfile"
-done
-unset toolfile
+# for toolfile in "$ZSH_MODULES"/tools/*.zsh; do
+#     _source_if_exists "$toolfile"
+# done
+# unset toolfile
