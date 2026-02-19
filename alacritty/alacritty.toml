@@ -41,4 +41,5 @@ import = [
 [terminal.shell]
 # program = "/usr/bin/tmux"
 # args = ["a"] # this is to open the latest tmux session
-program = "/home/mo/scripts/tmux_session.sh"
+# NOTE: it expects this scripts to be already added to path
+program = "tmux_session.sh"
