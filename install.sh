@@ -23,20 +23,20 @@ backup_and_link() {
   local link="$2"
 
   if [ -L "$link" ]; then
-      # Already a symlink - check if it points to the right place.
-      if [ "$(readlink "$link")" = "$target" ]; then
-          ok "$link already linked"
-          return
-      fi
-      warn "$link is a symlink to $(readlink "$link"), replacing"
-      rm "$link"
+    # Already a symlink - check if it points to the right place.
+    if [ "$(readlink "$link")" = "$target" ]; then
+      ok "$link already linked"
+      return
+    fi
+    warn "$link is a symlink to $(readlink "$link"), replacing"
+    rm "$link" || { err "Failed to remove $link - try running with sudo"; return 1; }
   elif [ -e "$link" ]; then
-      local backup="${link}.bak-${TIMESTAMP}"
-      warn "Backing up existing $link → $backup"
-      mv "$link" "$backup"
+    local backup="${link}.bak-${TIMESTAMP}"
+    warn "Backing up existing $link → $backup"
+    mv "$link" "$backup" || { err "Failed to backup $link - try running with sudo"; return 1; }
   fi
 
-  ln -s "$target" "$link"
+  ln -s "$target" "$link" || { err "Failed to link $link - try running with sudo"; return 1; }
   ok "Linked $link → $target"
 }
 
@@ -59,22 +59,25 @@ backup_and_link "$DOTFILES/tmux" "$HOME/.config/tmux"
 
 # -- Scripts ----------------------------------------------------
 
+# NOTE: using this path because alacritty config depends on tmux_session.sh being already in PATH.
+# May require sudo permissions
+SCRIPTS_DIR="/usr/local/bin"
+
 printf '\n\033[1m[ Scripts ]\033[0m\n'
-mkdir -p "$HOME/.local/bin"
 
 for script in "$DOTFILES"/scripts/*; do
-    [ -f "$script" ] || continue
-    name="$(basename "$script")"
+  [ -f "$script" ] || continue
+  name="$(basename "$script")"
 
-    # Make executable
-    if chmod +x "$script" 2>/dev/null; then
-        ok "chmod +x scripts/$name"
-    else
-        warn "Could not chmod +x scripts/$name - skipping"
-        continue
-    fi
+  # Make executable
+  if chmod +x "$script" 2>/dev/null; then
+      ok "chmod +x scripts/$name"
+  else
+      warn "Could not chmod +x scripts/$name - skipping"
+      continue
+  fi
 
-    backup_and_link "$script" "$HOME/.local/bin/$name"
+  backup_and_link "$script" "$SCRIPTS_DIR/$name"
 done
 
 # -- TPM (Tmux Plugin Manager) ----------------------------------
@@ -83,11 +86,11 @@ printf '\n\033[1m[ TPM ]\033[0m\n'
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 
 if [ -d "$TPM_DIR" ]; then
-    ok "TPM already installed at $TPM_DIR"
+  ok "TPM already installed at $TPM_DIR"
 else
-    info "Cloning TPM…"
-    git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
-    ok "TPM installed at $TPM_DIR"
+  info "Cloning TPM…"
+  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+  ok "TPM installed at $TPM_DIR"
 fi
 
 # -- Done -------------------------------------------------------
