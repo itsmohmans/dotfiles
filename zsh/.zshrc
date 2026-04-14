@@ -29,4 +29,10 @@ _source_if_exists "$ZSH_MODULES/path.zsh"
 _source_if_exists "$ZSH_MODULES/aliases.zsh"
 _source_if_exists "$ZSH_MODULES/functions.zsh"
 
+# load ssh-agent once per session
+if [[ -z "$SSH_AGENT_LOADED" ]]; then
+  export SSH_AGENT_LOADED=1
+  _source_if_exists "$ZSH_MODULES/ssh-agent.zsh"
+fi
+
 unset toolfile
